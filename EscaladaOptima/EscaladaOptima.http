@@ -1,0 +1,6 @@
+@EscaladaOptima_HostAddress = http://localhost:5269
+
+GET {{EscaladaOptima_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
