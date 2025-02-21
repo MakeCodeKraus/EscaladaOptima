@@ -1,0 +1,85 @@
+A continuación se presenta el pseudocódigo de la lógica utilizada para calcular la combinación óptima de
+elementos:
+
+INICIO
+
+// Definir la lista de elementos con sus propiedades (nombre, peso, calorías)
+Lista<Elemento> elementos ← [
+    { Nombre: "E1", Peso: 5, Calorias: 3 },
+    { Nombre: "E2", Peso: 3, Calorias: 5 },
+    { Nombre: "E3", Peso: 5, Calorias: 2 },
+    { Nombre: "E4", Peso: 1, Calorias: 8 },
+    { Nombre: "E5", Peso: 2, Calorias: 3 }
+]
+
+// Función principal para calcular la combinación óptima
+FUNCION CalcularCombinacionOptima(minCalorias, maxPeso)
+    combinaciones ← ObtenerTodasLasCombinaciones(elementos)
+
+    // Filtrar combinaciones que cumplen los requisitos
+    combinacionesValidas ← []
+    PARA CADA combinacion EN combinaciones HACER
+        pesoTotal ← SUM(combinacion.Peso)
+        caloriasTotales ← SUM(combinacion.Calorias)
+
+        SI pesoTotal ≤ maxPeso Y caloriasTotales ≥ minCalorias ENTONCES
+            AGREGAR combinacion A combinacionesValidas
+        FIN SI
+    FIN PARA
+
+    // Ordenar para encontrar la mejor combinación
+    combinacionOptima ← ORDENAR_DESC(combinacionesValidas, Peso) 
+                         LUEGO ORDENAR_DESC(caloriasTotales)
+                         TOMAR_PRIMERO()
+
+    // Devolver la mejor combinación encontrada
+    RETORNAR combinacionOptima
+FIN FUNCION
+
+// Genera todas las combinaciones posibles de los elementos
+FUNCION ObtenerTodasLasCombinaciones(elementos)
+    resultado ← []
+    total ← 2 ^ longitud(elementos) // Generar todas las combinaciones posibles
+
+    PARA i DESDE 1 HASTA total - 1 HACER
+        combinacion ← []
+        PARA j DESDE 0 HASTA longitud(elementos) - 1 HACER
+            SI (i & (1 << j)) ≠ 0 ENTONCES // Verifica si el bit está activado
+                AGREGAR elementos[j] A combinacion
+            FIN SI
+        FIN PARA
+        AGREGAR combinacion A resultado
+    FIN PARA
+
+    RETORNAR resultado
+FIN FUNCION
+
+// Ejecución principal con parámetros de ejemplo
+minCalorias ← 8
+maxPeso ← 10
+mejorCombinacion ← CalcularCombinacionOptima(minCalorias, maxPeso)
+
+// Imprimir la mejor combinación
+IMPRIMIR "Mejor combinación encontrada:", mejorCombinacion
+
+FIN
+
+## Características
+- **Listado de elementos** con sus respectivos pesos y calorías.
+- **Cálculo de combinación óptima**, maximizando el peso y garantizando un mínimo de calorías.
+- **Interfaz interactiva** para ingresar los parámetros y visualizar los resultados.
+- **API REST** para la obtención de elementos y cálculos.
+
+---
+
+## 🚀 Instalación y Ejecución
+
+### Requisitos Previos
+- .NET 6.0 o superior
+- Visual Studio / VS Code
+
+
+### Clonar el repositorio
+```sh
+git clone https://github.com/MakeCodeKraus/EscaladaOptima.git
+cd EscaladaOptima
