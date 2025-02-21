@@ -1,0 +1,129 @@
+@{
+    ViewData["Title"] = "Escalada Óptima";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/styles.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Escalada Óptima</h1>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h3>Requisitos</h3>
+                <div class="mb-3">
+                    <label for="minCalorias" class="form-label">Mínimo de calorías:</label>
+                    <input type="number" class="form-control" id="minCalorias" value="15">
+                </div>
+                <div class="mb-3">
+                    <label for="maxPeso" class="form-label">Peso máximo:</label>
+                    <input type="number" class="form-control" id="maxPeso" value="10">
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <h3>Elementos disponibles</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Peso</th>
+                            <th>Calorías</th>
+                        </tr>
+                    </thead>
+                    <tbody id="elementosTable">
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col text-center">
+                <button class="btn btn-primary" onclick="calcularCombinacionOptima()">Calcular Combinación Óptima</button>
+            </div>
+        </div>
+
+        <div class="row mt-4" id="combinacionOptimaContainer" style="display: none;">
+            <div class="col">
+                <h3>Combinación óptima:</h3>
+                <ul id="combinacionOptima" class="list-group">
+                    <!-- Se llenará dinámicamente -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            obtenerElementos();
+        });
+
+        function obtenerElementos() {
+            fetch("http://localhost:5269/api/escalada/elementos")
+                .then(response => response.json())
+                .then(data => {
+                    let elementosTable = document.getElementById("elementosTable");
+                    elementosTable.innerHTML = ""; // Limpiar tabla antes de insertar
+
+                    data.forEach(elemento => {
+                        let row = `<tr>
+                            <td>${elemento.nombre}</td>
+                            <td>${elemento.peso}</td>
+                            <td>${elemento.calorias}</td>
+                        </tr>`;
+                        elementosTable.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error("Error obteniendo los elementos:", error));
+        }
+
+        function calcularCombinacionOptima() {
+            let minCalorias = document.getElementById("minCalorias").value;
+            let maxPeso = document.getElementById("maxPeso").value;
+
+            fetch("http://localhost:5269/api/escalada/calcular", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    MinCalorias: parseInt(minCalorias),
+                    MaxPeso: parseInt(maxPeso)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let combinacionOptimaContainer = document.getElementById("combinacionOptimaContainer");
+                let combinacionOptima = document.getElementById("combinacionOptima");
+
+                combinacionOptima.innerHTML = ""; // Limpiar lista antes de insertar
+
+                if (data.length === 0) {
+                    combinacionOptima.innerHTML = "<li class='list-group-item'>No se encontró una combinación válida.</li>";
+                } else {
+                    data.forEach(elemento => {
+                        let listItem = `<li class="list-group-item">${elemento.nombre} - Peso: ${elemento.peso}, Calorías: ${elemento.calorias}</li>`;
+                        combinacionOptima.innerHTML += listItem;
+                    });
+                }
+
+                combinacionOptimaContainer.style.display = "block";
+            })
+            .catch(error => console.error("Error en la solicitud:", error));
+        }
+    </script>
+</body>
+</html>

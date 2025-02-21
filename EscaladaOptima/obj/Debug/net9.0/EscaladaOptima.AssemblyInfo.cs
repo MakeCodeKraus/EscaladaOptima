@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EscaladaOptima")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c0afc3ec77e21e4c6535364ea2c4bf29224707de")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+19972e97fc5797ed147b0f40225078711526ceda")]
 [assembly: System.Reflection.AssemblyProductAttribute("EscaladaOptima")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EscaladaOptima")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
